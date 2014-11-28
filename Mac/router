@@ -17,11 +17,12 @@ fi
 PIDFILE=/usr/local/var/dnsmasq/router.pid
 DNSMASQ_CONF=/usr/local/etc/dnsmasq.conf
 DNSMASQ_LOG=/tmp/dnsmasq.log
-DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com ggpht.com gmail.com google.com google.com.hk googleapis.com googlecode.com googleusercontent.com gstatic.com twitter.com wordpress.com wp.com youtube.com ytimg.com"
+DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com ggpht.com gmail.com google.com google.com.hk googleapis.com googlecode.com googleusercontent.com gstatic.com twitter.com wordpress.com wp.com youtube.com ytimg.com google-analytics.com"
 
 function dnsmasq_restart_log {
     rm $DNSMASQ_LOG
     killall -SIGUSR2 dnsmasq
+    killall -SIGHUP dnsmasq
 }
 
 if [ "x"$1 == "xstop" ]
