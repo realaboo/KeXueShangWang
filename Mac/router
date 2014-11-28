@@ -1,0 +1,110 @@
+#!/bin/bash
+
+function usage {
+    echo "router init"
+    echo "router start <vpn interface>"
+    echo "router stop"
+
+    exit 0
+}
+
+if [ $# -lt 1 ]
+then
+    echo "start or stop?"
+    exit 1
+fi
+
+PIDFILE=/usr/local/var/dnsmasq/router.pid
+DNSMASQ_CONF=/usr/local/etc/dnsmasq.conf
+DNSMASQ_LOG=/tmp/dnsmasq.log
+DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com ggpht.com gmail.com google.com google.com.hk googleapis.com googlecode.com googleusercontent.com gstatic.com twitter.com wordpress.com wp.com youtube.com ytimg.com"
+
+function dnsmasq_restart_log {
+    rm $DNSMASQ_LOG
+    killall -SIGUSR2 dnsmasq
+}
+
+if [ "x"$1 == "xstop" ]
+then
+    if [ -f $PIDFILE ]
+    then
+	kill -9 `cat $PIDFILE`
+	rm -f $PIDFILE
+    fi
+
+    dnsmasq_restart_log
+    exit 0
+fi
+
+if [ "x"$1 == "xinit" ]
+then
+    config="server="
+
+    for domain in $DOMAINS
+    do
+	echo "nameserver 127.0.0.1" > /etc/resolver/${domain}
+	config="${config}/${domain}"
+    done
+
+    echo "${config}/4.2.2.1" >> $DNSMASQ_CONF
+    echo "${config}/8.8.8.8" >> $DNSMASQ_CONF
+    echo "log-queries" >> $DNSMASQ_CONF
+    echo "log-facility=${DNSMASQ_LOG}" >> $DNSMASQ_CONF
+    exit 0
+fi
+
+if [ "x"$1 != "xstart" ]
+then
+    echo "not start"
+    exit 2
+fi
+
+if [ $# -lt 2 ]
+then
+    echo "missing interface"
+    exit 3
+fi
+
+IFACE=$2
+
+function check_pid_file {
+    if [ ! -f $PIDFILE ]
+    then
+	exit 0
+    fi
+}
+
+function process_query_result {
+    check_pid_file
+
+    if [ $# -ne 2 ]
+    then
+	return
+    fi
+
+    for domain in $DOMAINS
+    do
+	if [[ $1 == *${domain} ]] && [[ $2 =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]
+	then
+	    route add -host $2 -iface $IFACE
+	    return
+	fi
+    done
+}
+
+dnsmasq_restart_log
+
+if [ ! -f $DNSMASQ_LOG ]
+then
+    echo "${DNSMASQ_LOG} not found"
+    exit 4
+fi
+
+echo $$ > $PIDFILE
+
+tail -Fn0 $DNSMASQ_LOG | while read line
+do
+    check_pid_file
+
+    process_query_result `echo $line | awk '{if(NF == 8 && $5=="reply" && $7=="is") print $6,$8}'`
+done

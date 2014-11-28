@@ -1,0 +1,5 @@
+#!/bin/bash
+
+DNSMASQ_ROUTER=/usr/local/var/dnsmasq/router
+
+$DNSMASQ_ROUTER stop &

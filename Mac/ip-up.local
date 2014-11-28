@@ -1,0 +1,8 @@
+#!/bin/bash
+
+DNSMASQ_ROUTER=/usr/local/var/dnsmasq/router
+
+route add -host 4.2.2.1 -iface $PPP_IFACE
+route add -host 8.8.8.8 -iface $PPP_IFACE
+
+$DNSMASQ_ROUTER start $PPP_IFACE &
