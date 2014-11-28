@@ -22,6 +22,7 @@ DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com
 function dnsmasq_restart_log {
     rm $DNSMASQ_LOG
     killall -SIGUSR2 dnsmasq
+    killall -SIGHUP dnsmasq
 }
 
 if [ "x"$1 == "xstop" ]
