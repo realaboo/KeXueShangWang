@@ -9,13 +9,13 @@ ipset -N vpn iphash
 exit 0
 $ cat /etc/config/ipset-dns
 config ipset-dns
-# use given ipset for type A (IPv4) responses
+\# use given ipset for type A (IPv4) responses
 option ipset ‘vpn’
-# use given ipset for type AAAA (IPv6) responses
+\# use given ipset for type AAAA (IPv6) responses
 option ipset6 ‘vpn6′
-# use given listening port
+\# use given listening port
 option port ‘53001’
-# use given upstream DNS server,
+\# use given upstream DNS server,
 option dns ‘8.8.8.8’
 $ cat /etc/config/dhcp
 config dnsmasq
@@ -23,9 +23,9 @@ config dnsmasq
 option resolvfile ‘/tmp/resolv.conf.auto’
 list server ‘/google.com/gstatic.com/googleusercontent.com/googleapis.com/ggpht.com/127.0.0.1#53001′
 list server ‘/twitter.com/facebook.com/youtube.com/127.0.0.1#53001′
-# 其他域名会使用 /tmp/resolv.conf.auto 里的 DNS server，是 wan 里配置或者获得的（pppoe）。后面配 vpn 时不要 vpn 的 DNS。
-# 如果是 dnsmasq-full，可以直接配置 ipset
-# list ipset ‘/google.com/gstatic.com/ggpht.com/vpn’
+\# 其他域名会使用 /tmp/resolv.conf.auto 里的 DNS server，是 wan 里配置或者获得的（pppoe）。后面配 vpn 时不要 vpn 的 DNS。
+\# 如果是 dnsmasq-full，可以直接配置 ipset
+\# list ipset ‘/google.com/gstatic.com/ggpht.com/vpn’
  
 2. 用 iproute 增加一个专门的路由表 “vpn”。
 
