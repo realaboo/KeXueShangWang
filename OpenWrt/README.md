@@ -1,6 +1,6 @@
 ![](desc.png)
 
-1. 用 dnsmasq 和 ipset-dns 对指定的域名解析出来的 ip 加到一个 ipset “vpn” 里去。dnsmasq 后来的版本是包含 ipset 功能的，opkg 里包名是 dnsmasq-full，我的路由 rom 只有 4M 装不下，所以还是用 固件自带的 dnsmasq 加 ipset-dns。
+***用 dnsmasq 和 ipset-dns 对指定的域名解析出来的 ip 加到一个 ipset “vpn” 里去。dnsmasq 后来的版本是包含 ipset 功能的，opkg 里包名是 dnsmasq-full，我的路由 rom 只有 4M 装不下，所以还是用 固件自带的 dnsmasq 加 ipset-dns。***
 
 ```
 $ opkg update
@@ -29,14 +29,14 @@ list server '/twitter.com/facebook.com/youtube.com/127.0.0.1#53001'
 # list ipset '/google.com/gstatic.com/ggpht.com/vpn'
 ```
 
-2. 用 iproute 增加一个专门的路由表 “vpn”。
+***用 iproute 增加一个专门的路由表 “vpn”。***
 
 ```
 $ opkg install ip
 $ echo '1 vpn' >> /etc/iproute2/rt_tables
 ```
 
-3. 配置vpn，我用的pptp。可以是其他的。
+***配置vpn，我用的pptp。可以是其他的。***
 
 ```
 $ cat /etc/config/network
@@ -62,7 +62,7 @@ option mark '0x1'
 option lookup 'vpn' # 对于 mark 0x1 的包，走 vpn 路由表
 ```
 
-4. iptables 配置。
+***iptables 配置。***
 
 ```
 $ cat /etc/config/firewall
