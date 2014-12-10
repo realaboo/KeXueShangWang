@@ -17,7 +17,7 @@ fi
 PIDFILE=/usr/local/var/dnsmasq/router.pid
 DNSMASQ_CONF=/usr/local/etc/dnsmasq.conf
 DNSMASQ_LOG=/tmp/dnsmasq.log
-DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com ggpht.com gmail.com google.com google.com.hk googleapis.com googlecode.com googleusercontent.com gstatic.com twitter.com wordpress.com wp.com youtube.com ytimg.com google-analytics.com googlevideo.com youtube-nocookie.com gvt1.com"
+DOMAINS="admob.com android.com blogger.com blogspot.com dropbox.com facebook.com ggpht.com gmail.com google.com google.com.hk googleapis.com googlecode.com googleusercontent.com gstatic.com twitter.com wordpress.com wp.com youtube.com ytimg.com google-analytics.com googlevideo.com youtube-nocookie.com gvt1.com google.co.jp"
 
 function dnsmasq_restart_log {
     rm $DNSMASQ_LOG
